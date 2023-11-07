@@ -80,9 +80,6 @@ const (
 // action int — количество совершенных действий(число шагов при ходьбе и беге, либо гребков при плавании).
 // weight float64 — вес пользователя.
 // duration float64 — длительность тренировки в часах.
-// Рассчитывается по формуле
-// ((18 * СредняяСкоростьВКм/ч + 1.79) * ВесСпортсменаВКг / mInKM
-// * ВремяТренировкиВЧасах * minInH)
 func RunningSpentCalories(action int, weight, duration float64) float64 {
 
 	return (runningCaloriesMeanSpeedMultiplier * meanSpeed(action, duration) * runningCaloriesMeanSpeedShift) * weight / mInKm * duration * minInH
@@ -102,9 +99,6 @@ const (
 // duration float64 — длительность тренировки в часах.
 // weight float64 — вес пользователя.
 // height float64 — рост пользователя.
-// Рассчитывается по формуле
-// ((0.035 * ВесСпортсменаВКг + (СредняяСкоростьВКмЧ**2 / РостВМетрах)
-// * 0.029 * ВесСпортсменаВКг) * ВремяТренировкиВЧасах * minInH)
 func WalkingSpentCalories(action int, duration, weight, height float64) float64 {
 	height /= 100
 	return (walkingCaloriesWeightMultiplier*weight + (math.Pow(meanSpeed(action, duration)*kmhInMsec, 2)/height)*walkingSpeedHeightMultiplier*weight) * duration * minInH
@@ -129,15 +123,6 @@ func swimmingMeanSpeed(lengthPool, countPool int, duration float64) float64 {
 		return 0
 	}
 	return float64(lengthPool) * float64(countPool) / mInKm / duration
-}
-
-// swimmingDistance возвращает дистанцию(в километрах), которую преодолел пользователь за время плавания.
-//
-// Параметры:
-//
-// action int — количество совершенных действий (число гребков при плавании).
-func swimmongDistance(action int) float64 {
-	return float64(action) * swimmingLenStep / mInKm
 }
 
 // SwimmingSpentCalories возвращает количество потраченных калорий при плавании.
